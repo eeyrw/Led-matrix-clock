@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "8051.h": "c",
+        "constanttable.h": "c",
+        "74hc595.h": "c",
+        "8052.h": "c",
+        "stdio.h": "c",
+        "ds1302.h": "c"
+    }
+}
