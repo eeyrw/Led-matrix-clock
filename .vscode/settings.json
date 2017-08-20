@@ -5,6 +5,7 @@
         "74hc595.h": "c",
         "8052.h": "c",
         "stdio.h": "c",
-        "ds1302.h": "c"
+        "ds1302.h": "c",
+        "leddisplay.h": "c"
     }
 }

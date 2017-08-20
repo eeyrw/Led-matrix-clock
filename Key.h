@@ -1,10 +1,13 @@
 #ifndef __KEY_H__
 #define __KEY_H__
 
-#include <8052.h>
 
-#define KeySetPin P1_0
-#define KeyPlusPin P1_1
-#define KeyMinuPin P1_2
+extern __bit KeySetValue;
+extern __bit KeyPlusValue;
+extern __bit KeyMinuValue;
+
+extern void KeyScanHanlder(void);
+extern void KeyScan1msProc(void);
+extern void KeyInit(void);
 
 #endif
