@@ -5,6 +5,7 @@
 
 extern __bit NegativeNum1;
 extern __bit NegativeNum2;
+extern unsigned char DisplayStr[5];
 extern void LEDScanHandler(void);
 extern void LEDScan1msProc(void);
 extern char* LEDDisplayGetBuffer(void);

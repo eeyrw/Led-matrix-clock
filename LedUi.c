@@ -36,7 +36,7 @@ void LedUi1msProc(void)
     if ((StarupScreenCountDownTick != 0) && (UiDisplayState == StateShowStarupScreen))
     {
         StarupScreenCountDownTick--;
-    }    
+    }
 }
 
 void LedUiInit(void)
@@ -47,6 +47,15 @@ void LedUiInit(void)
 
 void LedUiHandler(void)
 {
+    if(!(UiDisplayState==StateSetHour || 
+            UiDisplayState==StateSetMinute ||
+            UiDisplayState==StateSetYear ||
+            UiDisplayState==StateSetMonth ||
+            UiDisplayState==StateSetDay))
+    {
+                DS1302_GetTime(&DT);
+    }
+        
     switch (UiDisplayState)
     {
     case StateShowStarupScreen:
@@ -64,8 +73,8 @@ void LedUiHandler(void)
         {
             UiDisplayState = StateBlackScreen;
         }
-        DS1302_GetTime(&DT);
         ShowTimeHandler();
+        ShowPointHandler();
         break;
     case StateShowYear:
         if (KeySetValue)
@@ -76,7 +85,6 @@ void LedUiHandler(void)
         {
             UiDisplayState = StateBlackScreen;
         }
-        DS1302_GetTime(&DT);
         ShowYearHandler();
         break;
     case StateShowDate:
@@ -88,7 +96,6 @@ void LedUiHandler(void)
         {
             UiDisplayState = StateBlackScreen;
         }
-        DS1302_GetTime(&DT);
         ShowDateHandler();
         break;
     case StateShowWeek:
@@ -100,7 +107,6 @@ void LedUiHandler(void)
         {
             UiDisplayState = StateBlackScreen;
         }
-        DS1302_GetTime(&DT);
         ShowWeekHandler();
         break;
     case StateBlackScreen:
@@ -134,7 +140,7 @@ void ShowTwoNumbers(unsigned char Num1, unsigned char Num2)
     unsigned char *source;
     unsigned char *target;
     unsigned char i;
-    char* DisplayStr=LEDDisplayGetBuffer();
+
     source = (unsigned char *)(NumberStr2 + Num2);
     target = DisplayStr + 3;
     for (i = 0; i < 2; i++)
@@ -160,7 +166,6 @@ void ShowYearNumbers(unsigned char Num1)
     unsigned char *source;
     unsigned char *target;
     unsigned char i;
-    char* DisplayStr=LEDDisplayGetBuffer();
 
     DisplayStr[0] = ' ';
     DisplayStr[1] = '2';
@@ -181,7 +186,6 @@ void ShowWeekStr(unsigned char Num1)
     unsigned char *source;
     unsigned char *target;
     unsigned char i;
-    char* DisplayStr=LEDDisplayGetBuffer();
 
     source = (unsigned char *)(WeekStr + Num1);
     target = DisplayStr;
@@ -196,7 +200,6 @@ void ShowWeekStr(unsigned char Num1)
 void ShowStarupScreenHandler(void)
 {
     char len = strlen(VER_STRING);
-    char* DisplayStr=LEDDisplayGetBuffer();
 
     if (len > 5)
         len = 5;
@@ -205,7 +208,6 @@ void ShowStarupScreenHandler(void)
 
 void ShowPointHandler(void)
 {
-    char* DisplayStr=LEDDisplayGetBuffer();
     if ((DT.Second % 2) == 0 && UiDisplayState == StateShowTime)
     {
         DisplayStr[2] = ':';
@@ -229,7 +231,6 @@ void ShowTimeHandler(void)
 
 void ShowDateHandler(void)
 {
-    char* DisplayStr=LEDDisplayGetBuffer();
     if (DT.Second == 15)
     {
         UiDisplayState = StateShowWeek;
@@ -262,7 +263,7 @@ void ShowWeekHandler(void)
 
 void SetHourHandler(void)
 {
-    char* DisplayStr=LEDDisplayGetBuffer();
+    
     DisplayStr[2] = ':';
     NegativeNum1 = 1;
     ShowTwoNumbers(DT.Hour, DT.Minute);
@@ -285,7 +286,6 @@ void SetHourHandler(void)
 
 void SetMinuteHandler(void)
 {
-    char* DisplayStr=LEDDisplayGetBuffer();
     DisplayStr[2] = ':';
     NegativeNum2 = 1;
     ShowTwoNumbers(DT.Hour, DT.Minute);
@@ -310,7 +310,6 @@ void SetMinuteHandler(void)
 
 void SetYearHandler(void)
 {
-    char* DisplayStr=LEDDisplayGetBuffer();
     ShowYearNumbers(DT.Year);
     NegativeNum2 = 1;
     if (KeySetValue)
@@ -332,7 +331,6 @@ void SetYearHandler(void)
 
 void SetMonthHandler(void)
 {
-    char* DisplayStr=LEDDisplayGetBuffer();
     DisplayStr[2] = '-';
     NegativeNum1 = 1;
     ShowTwoNumbers(DT.Month, DT.Day);
@@ -355,7 +353,6 @@ void SetMonthHandler(void)
 
 void SetDayHandler(void)
 {
-    char* DisplayStr=LEDDisplayGetBuffer();
     DisplayStr[2] = '-';
     NegativeNum2 = 1;
     ShowTwoNumbers(DT.Month, DT.Day);
@@ -378,7 +375,6 @@ void SetDayHandler(void)
 
 void BlackScreenHandler(void)
 {
-    char* DisplayStr=LEDDisplayGetBuffer();
     DisplayStr[0] = ' ';
     DisplayStr[1] = ' ';
     DisplayStr[2] = ' ';

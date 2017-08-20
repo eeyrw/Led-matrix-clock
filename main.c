@@ -35,10 +35,10 @@ int main(void)
     LEDDisplayInit();
     LedUiInit();
     KeyInit();
+    Timer0Init();
 
     while (1)
     {
-        LEDScanHandler();
         KeyScanHanlder();
         LedUiHandler();
     }

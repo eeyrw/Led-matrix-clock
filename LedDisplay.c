@@ -10,7 +10,7 @@ union LineData
     unsigned char Array[4];
 };
 
-unsigned char LEDDisplayStr[5]="    ";
+unsigned char DisplayStr[5]="    ";
 unsigned char CurrentLine;
 
 unsigned char LEDStateTick;
@@ -30,8 +30,10 @@ void LEDScan1msProc(void)
     if (LEDStateTick == 0)
     {
         LEDState = StateLEDScan;
-        LEDStateTick = 5;
+        LEDStateTick = 10;
     }
+
+    LEDScanHandler();
 }
 void LEDDisplayInit(void)
 {
@@ -55,7 +57,7 @@ void LEDDisplaySetNegative(unsigned char index,__bit isNegative)
 
 char* LEDDisplayGetBuffer(void)
 {
-    return LEDDisplayStr;
+    return DisplayStr;
 }
 
 void LEDScanHandler(void)
@@ -68,7 +70,7 @@ void LEDScanHandler(void)
     if (LEDState==StateLEDScan)
     {
         Line.Dat=0;
-        str=LEDDisplayStr;
+        str=DisplayStr;
 
         for (i=0;i<5;i++)
         {
@@ -94,7 +96,7 @@ void LEDScanHandler(void)
         {
             Write595(Line.Array[i]);
         }
-        P2=0xFF;
+        //P2=0xFF;
         Lock595();
 
         P2=SelectTable[CurrentLine];
